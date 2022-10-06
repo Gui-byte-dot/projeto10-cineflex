@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import { useEffect } from "react";
+import { Link } from "react-router-dom";
 
 
 export default function Filmes(){
@@ -26,7 +27,7 @@ export default function Filmes(){
             Selecione o filme
         </SelecaoFilme>
         <ListaFilmes>
-            {filmes.map((img) => <ImageFilm key={img.id} src={img.posterURL} alt="filmes" />)}
+            {filmes.map((img) => <Link to={`/${img.id}/showtimes`}><img key={img.id} src={img.posterURL} alt="filmes" /></Link>)}
         </ListaFilmes></>
     )
 }
@@ -37,12 +38,17 @@ const ListaFilmes = styled.div`
     texy-align:center;
     flex-wrap:wrap;
     margin 0 auto;
+    img{
+        width:129px;
+        height:193px;
+        padding-top:27px;
+    }
 `
-const ImageFilm = styled.img`
-    width:129px;
-    height:193px;
-    padding-top:27px;
-`
+// const ImageFilm = styled.img`
+//     width:129px;
+//     height:193px;
+//     padding-top:27px;
+// `
 const SelecaoFilme = styled.div`
     display:flex;
     justify-content:center;
