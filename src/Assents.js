@@ -3,21 +3,46 @@ import React, { useState } from "react"
 import { useEffect } from "react"
 import { useParams } from "react-router-dom"
 import styled from "styled-components"
+import "./styles.css"
+
 
 export default function Assents(){
     const [ seat, setSeat] = useState([])
     const [nome, setNome] = useState("")
     const [cpf, setCpdf] = useState("");
-    const [ft, setFt] = useState([])
+    const [ft, setFt] = useState([]);
+    const [ftmovie, setFtMovie] = useState([]);
+    const [ftday, setFtDay] = useState([]);
+    const [isActive, setIsActive] = useState(false);
+
+    function reservarassento(event){
+        event.preventDefault();
+       
+    }
+    // function handleseat(seat){
+    //     console.log(seat)
+    //     if(seat === 'false'){
+    //         return;
+    //     } else {
+    //         setSelected(current => !current)
+    //     }
+    // }
+   
+    
+  
 
     const {filmId} = useParams()
     useEffect(() => {
         const promise = axios.get(`https://mock-api.driven.com.br/api/v5/cineflex/showtimes/${filmId}/seats`)
 
         promise.then((rest) => {
+            setFt(rest.data);
             setSeat(rest.data.seats)
-            setFt(rest.data.movie);
+            setFtMovie(rest.data.movie);
+            setFtDay(rest.data.day);
+
             console.log(rest.data)
+            console.log(rest.data.seats)
         })
         promise.catch((error) => {
             console.log(error.response.data)
@@ -27,12 +52,13 @@ export default function Assents(){
 
     return(
         <>
-            <form>
+            <form onSubmit={reservarassento}>
                 <SelecionarAssento>
                     Selecione o(s) assento(s)
                 </SelecionarAssento>
                 <Assentos>
-                    {seat.map((ast) => <button key={ast.id}>{ast.id}</button>)}
+                    {seat.map((ast) => <button className={ast.isAvailable === false ? "indisponivel" : "disponivel"}key={ast.id} 
+                    style={{color: isActive ? 'salmon' : ''}}onClick={() => setIsActive(!isActive)}>{ast.id}</button>)}
                 </Assentos>
                 <Cores>
                     <Selecionado>
@@ -57,11 +83,15 @@ export default function Assents(){
                     <input type="number" placeholder="Digite seu CPF..." value={cpf} onChange={e => setCpdf(e.target.value)} />
                 </CpfComprador>
                 <ButtonReservar>
-                    <button>Reservar Assento</button>
+                    <button type="submit">Reservar Assento</button>
                 </ButtonReservar>
             </form>
             <RodapeAssento>
-                <img src={ft.posterURL} alt="asssento"/>
+                <img src={ftmovie.posterURL} alt="asssento"/>
+                <div >
+                    <p>{ftmovie.title}</p>
+                    <p>{ftday.weekday} - {ft.name}</p>
+                </div>
             </RodapeAssento>
 
             </>
@@ -83,7 +113,6 @@ const Assentos = styled.div`
     align-items:center;
     margin-left:24px;
     button{
-    background: #C3CFD9;
     border: 1px solid #808F9D;
     border-radius: 12px;
     width: 26px;
@@ -165,6 +194,7 @@ const NomeComprador = styled.div`
     justify-content:center;
     margin-left:24px;
     flex-direction:column;
+    margin-top:41px;
     input{
         background: #FFFFFF;
         border: 1px solid #D5D5D5;
@@ -201,15 +231,29 @@ const ButtonReservar = styled.div`
     border:none;
   }
 `
-const RodapeAssento = styled.footer`
-    width: 100%;
-    height: 117px;
-    left: 0px;
-    bottom: 0px;
+const RodapeAssento = styled.div`
+    display:flex;
+    width:100%;
+    margin-top:30px;
     background: #DFE6ED;
+    border: 1px solid #9EADBA;
+    left:0;
+    height:117px;
+    align-items:center;   
+    div{
+        margin-left:14px;
+        align-items:center;
+        vertical-align:center;
+
+    }
     img{
         width: 64px;
         height: 89px;
+        margin-left:10px;
     }
+    p{
+        font-size:24px;
+    }
+   
 `
 

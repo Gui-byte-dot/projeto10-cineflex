@@ -1,0 +1,29 @@
+.disponivel{
+    background: #C3CFD9;
+}
+.indisponivel{
+    background: #FBE192; 
+}
+.selected{
+    background: #1AAE9E;
+}
+.seat{
+    display:flex;
+    flex-direction:row;
+    flex-wrap:wrap;
+    width:327px;
+    align-items:center;
+    margin-left:24px;
+}
+.seat button{
+    border: 1px solid #808F9D;
+    border-radius: 12px;
+    width: 26px;
+    height: 26px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:11px;
+    margin-left:7px;
+    margin-top:18px;
+}
