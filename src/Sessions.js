@@ -3,6 +3,9 @@ import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import React from 'react'
 import styled from "styled-components"
+import { Link } from "react-router-dom"
+
+
 export default function Sessions(){
     const [sessions, setSessions] = useState([])
     const [session, setSession] = useState([])
@@ -37,7 +40,7 @@ export default function Sessions(){
                         <p>{reg.weekday} - {reg.date}</p>
                     </DataSemana>
                     <Horario>
-                        {reg.showtimes.map((exp) => <button key={exp.id}>{exp.name}</button>)}
+                        {reg.showtimes.map((exp) => <Link to={`/${exp.id}/seats`}><button key={exp.id}>{exp.name}</button></Link>)}
                     </Horario>              
             </>)}
             <RodapeFilme>
@@ -84,7 +87,7 @@ const Horario = styled.div`
     }
 `
 const RodapeFilme = styled.footer`
-    width: 375px;
+    width: 100%;
     height: 117px;
     left: 0px;
     bottom: 0px;
@@ -113,3 +116,4 @@ const RodapeFilme = styled.footer`
     }
     
 `
+

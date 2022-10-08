@@ -1,6 +1,7 @@
 import React from 'react';
 import Title from './Title';
 import Filmes from './Filmes';
+import Assents from './Assents';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Sessions from './Sessions';
 
@@ -11,6 +12,7 @@ export default function App() {
             <Routes>
                 <Route path="/" element={<Filmes />}/>
                 <Route path="/:imageId/showtimes" element={<Sessions />}/>
+                <Route path="/:filmId/seats" element={<Assents />}/>
             </Routes>
 
         
