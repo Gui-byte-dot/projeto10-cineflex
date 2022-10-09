@@ -5,31 +5,59 @@ import { useParams } from "react-router-dom"
 import styled from "styled-components"
 import "./styles.css"
 
+let assentoselecionado = [];
+
+function Seat({ seat, handleSeat }) {
+    return (
+      <>
+        {!seat.selected ? (
+            <button style={{backgroundColor: seat.isAvailable === false ? "#FBE192" : "#C3CFD9"}}className={`buttonseat ${seat.isAvailable}`} onClick={() => handleSeat(seat)}>{seat.id}</button>
+        ) : (
+            <button className={`buttonseat selected`} onClick={() => handleSeat(seat)}>{seat.id}</button>
+        )}
+      </>
+    );
+  }
+
+
 
 export default function Assents(){
-    const [ seat, setSeat] = useState([])
+    const [ seats, setSeats] = useState([])
     const [nome, setNome] = useState("")
     const [cpf, setCpdf] = useState("");
     const [ft, setFt] = useState([]);
     const [ftmovie, setFtMovie] = useState([]);
     const [ftday, setFtDay] = useState([]);
-    const [isActive, setIsActive] = useState(false);
+    const [selectedSeats, setSelectedSeats] = useState([])
 
     function reservarassento(event){
         event.preventDefault();
        
     }
-    // function handleseat(seat){
-    //     console.log(seat)
-    //     if(seat === 'false'){
-    //         return;
-    //     } else {
-    //         setSelected(current => !current)
-    //     }
-    // }
-   
+ 
     
   
+    function handleSeat(seat) {
+        if (seat.isAvailable === false) {
+          return;
+        }
+        seat.selected = !seat.selected;
+    
+        if (!seat.selected) {
+          const filteredSeats = selectedSeats.filter((s) => !(s.id === seat.id));
+          setSelectedSeats([...filteredSeats]);
+          return;
+        }
+        setSelectedSeats([...selectedSeats, seat]);
+        assentoselecionado.push(seat.id);
+        console.log(assentoselecionado)
+        return;
+      }
+
+
+    
+
+
 
     const {filmId} = useParams()
     useEffect(() => {
@@ -37,7 +65,7 @@ export default function Assents(){
 
         promise.then((rest) => {
             setFt(rest.data);
-            setSeat(rest.data.seats)
+            setSeats(rest.data.seats)
             setFtMovie(rest.data.movie);
             setFtDay(rest.data.day);
 
@@ -57,8 +85,9 @@ export default function Assents(){
                     Selecione o(s) assento(s)
                 </SelecionarAssento>
                 <Assentos>
-                    {seat.map((ast) => <button className={ast.isAvailable === false ? "indisponivel" : "disponivel"}key={ast.id} 
-                    style={{color: isActive ? 'salmon' : ''}}onClick={() => setIsActive(!isActive)}>{ast.id}</button>)}
+                {seats.map((seat, id) => (
+                <Seat key={id} seat={seat} handleSeat={handleSeat} />
+                ))}
                 </Assentos>
                 <Cores>
                     <Selecionado>
@@ -96,7 +125,7 @@ export default function Assents(){
 
             </>
     )
-}
+    }
 const SelecionarAssento = styled.div`
     display:flex;
     width:100%;
@@ -105,6 +134,7 @@ const SelecionarAssento = styled.div`
     align-items:center;
     font-size:24px;
 `
+// style={{backgroundColor: isActive === i ? '#1AAE9E' : ''}}
 const Assentos = styled.div`
     display:flex;
     flex-direction:row;
@@ -112,19 +142,20 @@ const Assentos = styled.div`
     width:327px;
     align-items:center;
     margin-left:24px;
-    button{
-    border: 1px solid #808F9D;
-    border-radius: 12px;
-    width: 26px;
-    height: 26px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:11px;
-    margin-left:7px;
-    margin-top:18px;
-    }
+    
 `
+// button{
+//     border: 1px solid #808F9D;
+//     border-radius: 12px;
+//     width: 26px;
+//     height: 26px;
+//     display:flex;
+//     align-items:center;
+//     justify-content:center;
+//     font-size:11px;
+//     margin-left:7px;
+//     margin-top:18px;
+//     }
 
 const Cores = styled.div`
     display:flex;
