@@ -2,18 +2,18 @@ import React from "react";
 import Assents from "./Assents";
 import reservarassento from "./Assents"
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Sucess(){
     let infocomprador =  JSON.parse(localStorage.getItem('person'))
     let infofilme = JSON.parse(localStorage.getItem('filme'))
     let navigate = useNavigate();
 
-    function navegar(){
+    // function navegar(){
 
-        navigate('/');
+    //     navigate('/');
 
-    }
+    // }
         
         return(
             <>
@@ -43,7 +43,7 @@ export default function Sucess(){
                 <p>CPF: {infocomprador.cpf}</p>
             </InfoComprador>
             <VoltarHome>
-                <button onClick={navegar}>Voltar para Home</button>
+                <Link to={'/'}><button>Voltar para Home</button></Link>
             </VoltarHome>
             </>
         )

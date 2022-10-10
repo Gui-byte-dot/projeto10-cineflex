@@ -10,7 +10,7 @@ export default function Sessions(){
     const [sessions, setSessions] = useState([])
     const [session, setSession] = useState([])
     const {imageId} = useParams()
-    
+
 
     useEffect(() => {
         const promise = axios.get(`https://mock-api.driven.com.br/api/v5/cineflex/movies/${imageId}/showtimes`)
@@ -72,7 +72,7 @@ const DataSemana = styled.div`
 const Horario = styled.div`
     display:flex;
     flex-direction:row;
-    margin-left:23px;
+    margin-left:20px;
     button{
         width: 83px;
         height: 43px;
@@ -81,10 +81,11 @@ const Horario = styled.div`
         font-size:18px;
         color:white;
         border:none;
+        margin-left:4px
+
     }
-    button:nth-child(2){
-        margin-left:8px
-    }
+   
+    
 `
 const RodapeFilme = styled.footer`
     width: 100%;
