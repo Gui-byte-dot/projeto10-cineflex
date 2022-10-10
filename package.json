@@ -12,10 +12,9 @@
   },
   "scripts": {
     "start": "react-scripts --openssl-legacy-provider start",
-    "build": "react-scripts --openssl-legacy-provider build",
+    "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "buildv17": "node --openssl-legacy-provider ./node_modules/@vercel/ncc/dist/ncc/cli.js build"
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [
