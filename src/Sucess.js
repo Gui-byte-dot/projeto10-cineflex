@@ -35,7 +35,7 @@ export default function Sucess(){
                 Ingressos
             </Ingressos>
             <InfoIngressos>
-                {(infocomprador.ids).map((s) => (<p>{s}</p>))}
+                {(infocomprador.ids).map((s) => (<p>Assento {s}</p>))}
             </InfoIngressos>
             <Comprador>Comprador</Comprador>
             <InfoComprador>

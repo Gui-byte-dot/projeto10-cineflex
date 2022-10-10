@@ -65,7 +65,6 @@ export default function Assents(){
                     console.log(err)
                 })
                 navigate('/sucesso');
-           
     }
     
  
