@@ -1,9 +1,11 @@
 import axios from "axios"
 import React, { useState } from "react"
 import { useEffect } from "react"
-import { useParams } from "react-router-dom"
+import {useParams} from "react-router-dom"
 import styled from "styled-components"
 import "./styles.css"
+import { useNavigate } from 'react-router';
+
 
 let assentoselecionado = [];
 
@@ -11,9 +13,16 @@ function Seat({ seat, handleSeat }) {
     return (
       <>
         {!seat.selected ? (
-            <button style={{backgroundColor: seat.isAvailable === false ? "#FBE192" : "#C3CFD9"}}className={`buttonseat ${seat.isAvailable}`} onClick={() => handleSeat(seat)}>{seat.id}</button>
+            <button 
+                style={{backgroundColor: seat.isAvailable === false ? "#FBE192" : "#C3CFD9"}}
+                className={`buttonseat ${seat.isAvailable}`} 
+                onClick={() => handleSeat(seat)}>{seat.id}
+            </button>
         ) : (
-            <button className={`buttonseat selected`} onClick={() => handleSeat(seat)}>{seat.id}</button>
+            <button 
+                className={`buttonseat selected`} 
+                onClick={() => handleSeat(seat)}>{seat.id}
+            </button>
         )}
       </>
     );
@@ -28,14 +37,39 @@ export default function Assents(){
     const [ft, setFt] = useState([]);
     const [ftmovie, setFtMovie] = useState([]);
     const [ftday, setFtDay] = useState([]);
-    const [selectedSeats, setSelectedSeats] = useState([])
+    const [selectedSeats, setSelectedSeats] = useState([]);
+    const {filmId} = useParams()
+    let navigate = useNavigate();
 
     function reservarassento(event){
-        event.preventDefault();
-       
+            event.preventDefault();
+
+            
+                const requisicao = axios.post("https://mock-api.driven.com.br/api/v5/cineflex/seats/book-many", {
+                    ids: selectedSeats.map(s => (s.id)),
+                    nome: nome,
+                    cpf: cpf,
+        
+                });
+                requisicao.then((as) => {
+                    console.log(as.config.data);
+                    let text1 = JSON.parse(as.config.data);
+                    // console.log(text1)
+
+                    localStorage.setItem('person', JSON.stringify(text1));
+
+
+
+                })
+                requisicao.then((err) => {
+                    console.log(err)
+                })
+                navigate('/sucesso');
+           
     }
- 
     
+ 
+   
   
     function handleSeat(seat) {
         if (seat.isAvailable === false) {
@@ -49,17 +83,12 @@ export default function Assents(){
           return;
         }
         setSelectedSeats([...selectedSeats, seat]);
-        assentoselecionado.push(seat.id);
-        console.log(assentoselecionado)
+        // assentoselecionado.push(seat.id);
+
         return;
-      }
 
+    }
 
-    
-
-
-
-    const {filmId} = useParams()
     useEffect(() => {
         const promise = axios.get(`https://mock-api.driven.com.br/api/v5/cineflex/showtimes/${filmId}/seats`)
 
@@ -71,16 +100,20 @@ export default function Assents(){
 
             console.log(rest.data)
             console.log(rest.data.seats)
+            let text2 = rest.data;
+
+            localStorage.setItem('filme', JSON.stringify(text2));
         })
         promise.catch((error) => {
             console.log(error.response.data)
         })
     },[])
    
+   
 
     return(
         <>
-            <form onSubmit={reservarassento}>
+            <div >
                 <SelecionarAssento>
                     Selecione o(s) assento(s)
                 </SelecionarAssento>
@@ -105,16 +138,17 @@ export default function Assents(){
                 </Cores>
                 <NomeComprador>
                     <p>Nome do comprador</p>
-                    <input type="text" placeholder="Digite seu nome..." value={nome} onChange={e => setNome(e.target.value)} />
+                    <input type="text" placeholder="Digite seu nome..." value={nome} onChange={e => setNome(e.target.value)} required />
                 </NomeComprador>
                 <CpfComprador>
                     <p>CPF do comprador</p>
-                    <input type="number" placeholder="Digite seu CPF..." value={cpf} onChange={e => setCpdf(e.target.value)} />
+                    <input type="number" placeholder="Digite seu CPF..." value={cpf} onChange={e => setCpdf(e.target.value)} required />
                 </CpfComprador>
                 <ButtonReservar>
-                    <button type="submit">Reservar Assento</button>
+                        <button onClick={reservarassento}><span>Reservar Assento</span></button>
+
                 </ButtonReservar>
-            </form>
+            </div>
             <RodapeAssento>
                 <img src={ftmovie.posterURL} alt="asssento"/>
                 <div >
@@ -122,10 +156,9 @@ export default function Assents(){
                     <p>{ftday.weekday} - {ft.name}</p>
                 </div>
             </RodapeAssento>
-
             </>
     )
-    }
+}
 const SelecionarAssento = styled.div`
     display:flex;
     width:100%;
@@ -134,7 +167,6 @@ const SelecionarAssento = styled.div`
     align-items:center;
     font-size:24px;
 `
-// style={{backgroundColor: isActive === i ? '#1AAE9E' : ''}}
 const Assentos = styled.div`
     display:flex;
     flex-direction:row;

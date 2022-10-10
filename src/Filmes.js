@@ -27,7 +27,7 @@ export default function Filmes(){
             Selecione o filme
         </SelecaoFilme>
         <ListaFilmes>
-            {filmes.map((img) => <Link to={`/${img.id}/showtimes`}><img key={img.id} src={img.posterURL} alt="filmes" /></Link>)}
+            {filmes.map((img) => <Link to={`/${img.id}/showtimes`}><img key={img.id} src={img.posterURL}  alt="filmes" /></Link>)}
         </ListaFilmes></>
     )
 }
